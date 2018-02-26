@@ -15,10 +15,13 @@ class CreateActorsTable extends Migration
     {
         Schema::create('actors', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('admin_id');
+
+            $table->unsignedInteger('admin_id');
             $table->string('name');
             $table->string('information');
             $table->string('image_path')->nullable();
+            $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
+            $table->index(['id', 'admin_id','name']);
             $table->softDeletes();
             $table->timestamps();
         });

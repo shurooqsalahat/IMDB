@@ -15,9 +15,12 @@ class CreateFilmsTable extends Migration
     {
         Schema::create('films', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('admin_id');
+
+            $table->unsignedInteger('admin_id');
             $table->string('name');
-            $table->string('summary');
+            $table->text('summary');
+            $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
+            $table->index(['id', 'admin_id','name']);
             $table->softDeletes();
             $table->timestamps();
         });
