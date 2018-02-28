@@ -11,10 +11,17 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
+Route::get('admin', function () {
+    return view('admin_home');
+});
+Route::get('user', function () {
+    return view('user_home');
+});
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('logout' , 'Auth\LoginController@logout')->name('out');
+
+Route::resource('actors', 'ActorsController');

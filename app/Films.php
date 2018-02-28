@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Films extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'admin_id', 'name', 'summary',
     ];
@@ -15,5 +16,5 @@ class Films extends Model
      *
      * @var array
      */
-
+    protected $dates = ['deleted_at'];
 }

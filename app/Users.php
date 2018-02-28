@@ -1,15 +1,20 @@
 <?php
 
 namespace App;
-
-use Illuminate\Database\Eloquent\Model;
-
-class Users extends Model
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+class Users extends Authenticatable
 {
-    protected $fillable = [
-        'email', 'name', 'password',
-    ];
 
+    use Notifiable;
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'email', 'password','is_admin',
+    ];
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -18,4 +23,12 @@ class Users extends Model
     protected $hidden = [
         'password', 'remember_token',
     ];
+    /*check if user is admin or not
+     * */
+     public  function isAdmin(){
+         if($this->is_admin){
+             return true;
+         }
+         return false;
+     }
 }

@@ -3,17 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Actors extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'admin_id', 'name', 'information','image_path',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
 
+    protected $dates = ['deleted_at'];
 }
