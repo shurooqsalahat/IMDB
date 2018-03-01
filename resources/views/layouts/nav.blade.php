@@ -22,7 +22,7 @@
                        aria-expanded="false">Manage <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ route('actors.index') }}">Actors</a></li>
-                        <li><a href="#">Films</a></li>
+                        <li><a href="{{ route('films.index') }}">Films</a></li>
                         <li><a href="#">Users</a></li>
 
                     </ul>

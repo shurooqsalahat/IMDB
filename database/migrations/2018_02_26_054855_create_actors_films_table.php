@@ -18,8 +18,10 @@ class CreateActorsFilmsTable extends Migration
 
             $table->unsignedInteger('film_id');
             $table->unsignedInteger('actor_id');
+            $table->unsignedInteger('admin_id');
             $table->foreign('film_id')->references('id')->on('films')->onDelete('cascade');
             $table->foreign('actor_id')->references('id')->on('actors')->onDelete('cascade');
+            $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

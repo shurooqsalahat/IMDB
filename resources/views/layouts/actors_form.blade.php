@@ -1,7 +1,6 @@
 {{ csrf_field() }}
 <fieldset>
     <div class="col-md-5">
-        <h3 style="margin-bottom: 25px; text-align: center;">Add Actors</h3>
         <div class="form-group">
             {{ Form::label('firstname', ' Name')}}
             {{ Form::text('name', $actor->name, ['class' => 'form-control'])}}
