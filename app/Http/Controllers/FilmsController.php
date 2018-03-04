@@ -10,8 +10,8 @@ use App\Http\Requests\StoreBlogPost;
 use Illuminate\Http\Request;
 use File;
 use Auth;
-use Image;
-use DB;
+use App\helper;
+use Illuminate\Support\Facades\App;
 
 class FilmsController extends Controller
 {
@@ -23,8 +23,7 @@ class FilmsController extends Controller
     public function index()
     {
         $films = Films::all();
-
-        return view('films', ['films' => $films]);
+        return view('film/films', ['films' => $films]);
     }
 
     /**
@@ -35,8 +34,9 @@ class FilmsController extends Controller
     public function create()
     {
         $allActors = Actors::all();
+        $actors = new ActorsFilms();
         $film = new Films;
-        return view('add_films', compact('film', 'allActors'));
+        return view('film/add_films', compact('film', 'allActors', 'actors'));
     }
 
     /**
@@ -47,7 +47,6 @@ class FilmsController extends Controller
      */
     public function store(StoreBlogPost $request)
     {
-
         $film = new Films;
         $film->admin_id = Auth::user()->id;
         $film->name = $request->name;
@@ -65,14 +64,8 @@ class FilmsController extends Controller
         $fm = new FilmsMedia;
         if ($request->file('images')) {
             foreach ($request->file('images') as $image) {
-                $input['imageName'] = rand(10, 100000) . time() . '.' . $image->getClientOriginalExtension();
-                $destinationPath = public_path('/films_thumbnail');
-                $thumb_img = Image::make($image->getRealPath())->resize(300, 200);
-                $thumb_img->save($destinationPath . '/' . $input['imageName']);//move resizable image
-                $destinationPath = public_path('/films_uploads');//move original image
-                $image->move($destinationPath, $input['imageName']);
+                $input['imageName'] = helper::storeImage($image, '/films_thumbnail', '/films_uploads');
                 $fm->store(Auth::user()->id, $currentId, $input['imageName']);
-
             }
         } else {
             $input['imageName'] = '1.png';
@@ -82,10 +75,9 @@ class FilmsController extends Controller
 
         //get trailers and store it
         if ($request->file('trailers')) {
-            foreach ($request->file('trailers') as $trial) {
-                $input['trialName'] = rand(10, 100000) . time() . '.' . $trial->getClientOriginalExtension();
-                $destinationPath = public_path('/films_trials');
-                $trial->move($destinationPath, $input['trialName']);
+            foreach ($request->file('trailers') as $trialer) {
+
+                $input['trialName'] = helper::storeTrailers($trialer, '/films_trials');
                 $fm->store(Auth::user()->id, $currentId, $input['trialName']);
             }
 
@@ -121,9 +113,9 @@ class FilmsController extends Controller
 
         if ($film = Films::find($id)) {
             $actors = ActorsFilms::where('film_id', $id)->get();//actors for this film
-            $media =FilmsMedia::where('film_id',$id)->get();
+            $media = FilmsMedia::where('film_id', $id)->get();
             $allActors = Actors::all();
-            return view('edit_films',  compact('film', 'allActors' , 'actors'));
+            return view('film/edit_films', compact('film', 'allActors', 'actors'));
         } else {
             return redirect(route('films.index'))->with('errorMsg', 'This ID is not exist please try again');
         }
@@ -155,27 +147,17 @@ class FilmsController extends Controller
         $fm = new FilmsMedia;
         if ($request->file('images')) {
             foreach ($request->file('images') as $image) {
-                $input['imageName'] = rand(10, 100000) . time() . '.' . $image->getClientOriginalExtension();
-                $destinationPath = public_path('/films_thumbnail');
-                $thumb_img = Image::make($image->getRealPath())->resize(300, 200);
-                $thumb_img->save($destinationPath . '/' . $input['imageName']);//move resizable image
-                $destinationPath = public_path('/films_uploads');//move original image
-                $image->move($destinationPath, $input['imageName']);
+                $input['imageName'] = helper::storeImage($image, '/films_thumbnail', '/films_uploads');
                 $fm->store(Auth::user()->id, $currentId, $input['imageName']);
-
             }
         } else {
             $input['imageName'] = '1.png';
             $fm->store(Auth::user()->id, $currentId, $input['imageName']);
         }
-
-
         //get trailers and store it
         if ($request->file('trailers')) {
-            foreach ($request->file('trailers') as $trial) {
-                $input['trialName'] = rand(10, 100000) . time() . '.' . $trial->getClientOriginalExtension();
-                $destinationPath = public_path('/films_trials');
-                $trial->move($destinationPath, $input['trialName']);
+            foreach ($request->file('trailers') as $trialer) {
+                $input['trialName'] = helper::storeTrailers($trialer, '/films_trials');
                 $fm->store(Auth::user()->id, $currentId, $input['trialName']);
             }
 

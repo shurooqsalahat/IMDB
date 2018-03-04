@@ -1,13 +1,9 @@
 {{ csrf_field() }}
-
 <fieldset>
     <div class="col-md-5">
-
         <div class="form-group">
             {{ Form::label('firstname', ' Name')}}
             {{ Form::text('name', $film->name, ['class' => 'form-control'])}}
-
-
         </div>
         <div class="form-group">
             <select id="actors" name="actors[]" multiple class="form-control">
@@ -17,15 +13,7 @@
             </select>
         </div>
         <div class="form-group">
-
         </div>
-        @if($actors)
-            <div class="form-group">
-                @foreach ($actors as $actor)
-                    <p>{{$actor->name}}</p>
-                @endforeach   
-            </div>
-        @endif
         <div class="form-group">
             {{ Form::label('image', ' Image')}}
             {{ Form::file('images[]', array('class'=>'file', 'multiple'),['class' => 'form-control'])}}
@@ -46,18 +34,13 @@
     </div>
 
     </div>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css"></script>
     <script type="text/javascript">
-
-
         $(document).ready(function () {
             $('#actors').multiselect({
                 nonSelectedText: 'Select Language'
             });
         });
-
-
     </script>
 
 

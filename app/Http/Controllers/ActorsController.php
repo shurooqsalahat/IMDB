@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreBlogPost;
 use File;
 use Auth;
-use Image;
+use App\helper;
 
 class ActorsController extends Controller
 {
@@ -19,7 +19,7 @@ class ActorsController extends Controller
     public function index()
     {
         $actors = Actors::all();
-        return view('actors', ['actors' => $actors]);
+        return view('actor/actors', compact('actors'));
     }
 
     /**
@@ -30,7 +30,7 @@ class ActorsController extends Controller
     public function create()
     {
         $actor = new actors;
-        return view('add_actors', compact('actor'));
+        return view('actor/add_actors', compact('actor'));
     }
 
     /**
@@ -43,16 +43,9 @@ class ActorsController extends Controller
     {
         $actor = new Actors;
 
-        if ($image = $request->file('image')) {
+        if ($request->file('image')) {
             $image = $request->file('image');
-            $input['imageName'] = time() . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path('/thumbnail');
-            $thumb_img = Image::make($image->getRealPath())->resize(300, 200);
-            $thumb_img->save($destinationPath.'/'. $input['imageName']);
-            $destinationPath = public_path('/uploads');
-            $image->move($destinationPath, $input['imageName']);
-            $actor->image_path = $input['imageName'];
-
+            $actor->image_path= helper::storeImage($image,'/uploads','/thumbnail');
         } else {
             $actor->image_path = '1.png';
         }
@@ -85,7 +78,7 @@ class ActorsController extends Controller
     public function edit($id)
     {
         if ($actor = Actors::find($id)) {
-            return view('edit_actors', compact('actor'));
+            return view('actor/edit_actors', compact('actor'));
         } else {
             return redirect(route('actors.index'))->with('errorMsg', 'This ID is not exist please try again');
         }
@@ -101,18 +94,11 @@ class ActorsController extends Controller
     public function update(StoreBlogPost $request, $id)
     {
         $actor = Actors::find($id);
-        if ($image = $request->file('image')) {
-            $image = $request->file('image');
-            $input['imageName'] = time() . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path('/thumbnail');
-            $thumb_img = Image::make($image->getRealPath())->resize(300,200);
-            $thumb_img->save($destinationPath . '/' . $input['imageName']);
-            $destinationPath = public_path('/uploads');
-            $image->move($destinationPath, $input['imageName']);
-            $actor->image_path = $input['imageName'];
+        if ($request->file('image')) {
+            $image=$request->file('image');
+            $actor->image_path= helper::storeImage($image,'/uploads','/thumbnail');
+
         }
-
-
         $actor->admin_id = Auth::user()->id;
         $actor->name = $request->name;
         $actor->information = $request->information;

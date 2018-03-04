@@ -16,11 +16,9 @@ class ActorsFilms extends Model
 
     public  function store($admin_id , $films_id , $actors_id)
     {
-
-        DB::table('actors_films')->insert(
-            ['admin_id' => $admin_id, 'film_id' =>$films_id,'actor_id' => $actors_id , 'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')]
-        );
-
+        $this->film_id =$films_id;
+        $this->actor_id =$actors_id;
+        $this->admin_id =$admin_id;
+        $this->save();
     }
 }
