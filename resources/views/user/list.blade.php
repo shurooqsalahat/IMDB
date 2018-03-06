@@ -5,8 +5,7 @@
         @if($list)
             @foreach($list as $li)
                 <div class="col-lg-4"> {{$li}}</div>
-                <div class="col-lg-4"> <a href="#">delete</a>   </div>
-
+                <div class="col-lg-4"> <a href="{{route('deleteList')}}">delete</a>   </div>
                 <hr>
                 @endforeach
 

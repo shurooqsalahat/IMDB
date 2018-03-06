@@ -14,7 +14,7 @@
         @foreach ($films as $film)
        <div class="col">
          <a href="{{route('showFilm', $film->id)}}"> {{$film->name}} </a>
-           <div>  <a href="{{route('add',$film->id)}}" class="btn btn-info"style="font-size: 10px;"> add To list</a>  <a class="btn btn-default" style="font-size: 10px;">show Trailer</a>   </div>
+           <div>  <a href="{{route('add',$film->id)}}" class="btn btn-info"style="font-size: 10px;"> add To list</a>  <a href="{{route('showTrailer',$film->id)}}" class="btn btn-default" style="font-size: 10px;">show Trailer</a>   </div>
        </div>
             <hr>
         @endforeach

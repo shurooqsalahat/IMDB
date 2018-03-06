@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Films;
 use App\Actors;
 use App\ListsUser;
@@ -17,7 +18,6 @@ class UsersController extends Controller
     {
 
         $film = Films::find($id);
-        // $listfilm = ListsUser::find
         if ($film) {
             $list = new ListsUser;
             $list->user_id = Auth::user()->id;
@@ -26,8 +26,8 @@ class UsersController extends Controller
             $films = Films::all();
             return redirect(route('allFilms'))->with('successMsg', 'films Successfully Added To Your list');
         } else {
-            $films = Films::all();
-            return view('user/all_films', compact('films'))->with('errorMsg', 'films Not found ');
+
+            return redirect(route('allFilms'))->with('errorMsg', 'Something error !');
         }
     }
 
@@ -79,21 +79,47 @@ class UsersController extends Controller
 
         return view('user/all_films', compact('films', 'imageArray'));
     }
-      /*show user lists
-       * args : user id
-       * */
+
+    /*show user lists
+     * args : user id
+     * */
     public function showlist($user_id)
     {
         $user = Users::find($user_id);
         $list = array();
-        $idArray=array();
+        $idArray = array();
         foreach ($user->Lists as $b) {
             $film = Films::find($b->film_id);
-            array_push($idArray,$b->film_id);
+            array_push($idArray, $b->film_id);
             array_push($list, $film->name);
         }
         return view('user/list', compact('list'));
     }
+    /*
+     * show film trailer
+     * args : film id
+     * */
+    public function showTrailer($film_id)
+    {
+        $videoArray = array();
+        $film = Films::find($film_id);
+        if ($film) {
+            foreach ($film->Media as $fm) {
+                $ext = pathinfo($fm->path, PATHINFO_EXTENSION);
 
+                if ($ext == 'mp4') {
+                    array_push($videoArray, $fm->path);
+                }
+            }
+            return view('user/Trailer', compact('videoArray'));
+        }
+        else{
+            return redirect(route('allFilms'))->with('errorMsg', 'Something error !');
 
+        }
+    }
+
+    public function deleteList($list_id){
+
+    }
 }

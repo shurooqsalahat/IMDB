@@ -23,9 +23,9 @@ Route::get('logout' , 'Auth\LoginController@logout')->name('out');
 Route::get('allFilms','UsersController@getFilms')->name('allFilms');
 Route::get('showFilm/{id}','UsersController@showFilm')->name('showFilm');
 Route::get('add/{id}','UsersController@addToList')->name('add');
-Route::get('showTrailer/{id}','UsersController@showTrailer')->name('showTrialer');
+Route::get('showTrailer/{film_id}','UsersController@showTrailer')->name('showTrailer');
 Route::get('showList/{user_id}','UsersController@showList')->name('showList');
-
+Route::get('delete/{list_id}','UsersController@deleteList')->name('deleteList');
 Route::resource('actors', 'ActorsController');
 Route::resource('films', 'FilmsController');
 
