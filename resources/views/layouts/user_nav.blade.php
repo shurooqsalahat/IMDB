@@ -16,8 +16,8 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
 
-                <li><a href="#">Films</a></li>
-                <li><a href="#">watch list</a></li>
+                <li><a href="{{route('allFilms')}}">Films</a></li>
+                <li><a href="{{route('user.index')}}">watch list</a></li>
             </ul>
             </li>
             </ul>

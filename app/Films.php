@@ -18,4 +18,13 @@ class Films extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+    public function Actors()
+    {
+        return $this->belongsToMany('App\Actors','actors_films','film_id','actor_id');
+    }
+    public function Media()
+    {
+        return $this->hasMany('App\FilmsMedia','film_id');
+    }
+
 }

@@ -13,20 +13,18 @@ class FilmsMedia extends Model
     ];
     protected $dates = ['deleted_at'];
 
-
-
     public  function store($admin_id , $films_id,$path)
     {
-        $this->admin_id =$admin_id;
+        /*$this->admin_id =$admin_id;
         $this->film_id =$films_id;
         $this->path =$path;
-
-        $this->save();
-
-        /*DB::table('films_media')->insert(
+        $this->save();*/
+        DB::table('films_media')->insert(
             ['admin_id' => $admin_id , 'film_id' =>$films_id,'path' =>$path , 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')]
-        );*/
+        );
 
     }
+
+
 }

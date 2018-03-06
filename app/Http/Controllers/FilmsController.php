@@ -63,6 +63,7 @@ class FilmsController extends Controller
         //get image and store it
         $fm = new FilmsMedia;
         if ($request->file('images')) {
+
             foreach ($request->file('images') as $image) {
                 $input['imageName'] = helper::storeImage($image, '/films_thumbnail', '/films_uploads');
                 $fm->store(Auth::user()->id, $currentId, $input['imageName']);
@@ -76,7 +77,6 @@ class FilmsController extends Controller
         //get trailers and store it
         if ($request->file('trailers')) {
             foreach ($request->file('trailers') as $trialer) {
-
                 $input['trialName'] = helper::storeTrailers($trialer, '/films_trials');
                 $fm->store(Auth::user()->id, $currentId, $input['trialName']);
             }
@@ -112,10 +112,24 @@ class FilmsController extends Controller
     {
 
         if ($film = Films::find($id)) {
-            $actors = ActorsFilms::where('film_id', $id)->get();//actors for this film
-            $media = FilmsMedia::where('film_id', $id)->get();
-            $allActors = Actors::all();
-            return view('film/edit_films', compact('film', 'allActors', 'actors'));
+            $af = Films::find($id);//actors for this film
+            $imageArray = array();
+            $videoArray = array();
+            $actorsArray=array();
+            foreach ($af->Actors as $a) {
+             array_push(  $actorsArray,$a->name);
+            }
+            foreach ($af->Media as $b) {
+                $ext = pathinfo($b->path, PATHINFO_EXTENSION);
+                if($ext=='jpg' ||$ext=='jpeg' ||$ext=='png'||$ext=='gif'){
+                    array_push(  $imageArray,$b->path);
+                }
+                else{
+                    array_push(  $videoArray,$b->path);
+                }
+            }
+              $allActors = Actors::all();
+            return view('film/edit_films', compact('film', 'imageArray', 'allActors' , 'actorsArray','videoArray'));
         } else {
             return redirect(route('films.index'))->with('errorMsg', 'This ID is not exist please try again');
         }
@@ -137,10 +151,12 @@ class FilmsController extends Controller
         $film->save();
         $currentId = $film->id;
         //get actors and store it
+        dd($request->actors);
         if ($request->actors) {
             $Af = new ActorsFilms;
             foreach ($request->actors as $actor) {
-                $Af->store(Auth::user()->id, $currentId, $actor);
+
+            $Af->store(Auth::user()->id, $currentId, $actor);
             }
         }
         //get image and store it
@@ -166,6 +182,7 @@ class FilmsController extends Controller
             $input['trialName'] = '11.png';
             $fm->store(Auth::user()->id, $currentId, $input['trialName']);
         }
+        return redirect(route('films.index'))->with('successMsg', 'Films Successfully updated');
 
     }
 

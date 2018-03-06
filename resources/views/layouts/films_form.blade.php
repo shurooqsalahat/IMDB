@@ -12,6 +12,24 @@
                 @endforeach   
             </select>
         </div>
+        <div class="form-group" >
+            @if(!empty($actorsArray))
+                @foreach($actorsArray as $act)
+            <p class="form-control">{{$act}} </p>
+              @endforeach
+            @endif
+        </div>
+        <div class="form-group">
+         @if(!empty($imageArray))
+             <img src="{{asset('films_uploads').'//'.$imageArray[0]}}">
+             @endif
+             @if(!empty($videoArray))
+                 <video width="400" height="400" controls>
+                     <source src="{{asset('films_trials').'//'.$videoArray[0]}}" type="video/mp4">
+                 </video>
+
+             @endif
+        </div>
         <div class="form-group">
         </div>
         <div class="form-group">

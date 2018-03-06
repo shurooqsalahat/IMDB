@@ -30,10 +30,6 @@ class StoreBlogPost extends FormRequest
             'name' => 'required',
             'information' => 'required',
             'image'=>'image',
-
-
-
-
-        ];
+            ];
     }
 }

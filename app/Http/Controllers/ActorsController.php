@@ -55,7 +55,7 @@ class ActorsController extends Controller
         $actor->name = $request->name;
         $actor->information = $request->information;
         $actor->save();
-        return redirect(route('actors.index'))->with('successMsg', 'Student Successfully Added');
+        return redirect(route('actors.index'))->with('successMsg', 'Actor Successfully Added');
     }
 
     /**

@@ -2,14 +2,66 @@
 
 namespace App\Http\Controllers;
 
+use App\Films;
+use App\ListsUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
-    public function getFilms()
+    /*Add film to user list
+     *
+     * */
+    public function addToList($id)
     {
 
+        $film = Films::find($id);
+       // $listfilm = ListsUser::find
+        if ($film) {
+            $list = new ListsUser;
+            $list->user_id = Auth::user()->id;
+            $list->film_id = $id;
+            $list->save();
+            $films = Films::all();
+            return redirect(route('allFilms'))->with('successMsg', 'films Successfully Added To Your list');
+        } else {
+            $films = Films::all();
+            return view('user/all_films', compact('films'))->with('errorMsg', 'films Not found ');
+        }
     }
+
+    public function showFilm($id)
+    {
+        if ($film = Films::find($id)) {
+
+            return view('user/film_details', compact('film'));
+        } else {
+            $films = Films::all();
+
+            return view('user/all_films', compact('films'));
+        }
+    }
+
+
+
+    public function getFilms()
+    {
+        $imageArray = array();
+        $films = Films::all();
+        foreach ($films as $f) {
+            foreach ($f->Media as $fm) {
+                $ext = pathinfo($fm->path, PATHINFO_EXTENSION);
+                if ($ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'gif') {
+                    array_push($imageArray, $fm->path);
+                }
+
+            }
+
+        }
+
+        return view('user/all_films', compact('films', 'imageArray'));
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +71,8 @@ class UsersController extends Controller
 
     public function index()
     {
-        //
+        $lists = ListsUser::all();
+        return view('user/list',compact('lists'));
     }
 
     /**

@@ -20,9 +20,11 @@ Route::get('user', function () {
 });
 Auth::routes();
 Route::get('logout' , 'Auth\LoginController@logout')->name('out');
-
-
-
+Route::get('allFilms','UsersController@getFilms')->name('allFilms');
+Route::get('showFilm/{id}','UsersController@showFilm')->name('showFilm');
+Route::get('add/{id}','UsersController@addToList')->name('add');
+Route::get('showTrailer/{id}','UsersController@showTrailer')->name('show');
+Route::resource('user', 'UsersController');
 Route::resource('actors', 'ActorsController');
 Route::resource('films', 'FilmsController');
 
