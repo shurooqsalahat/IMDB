@@ -55,8 +55,9 @@ class FilmsController extends Controller
         $currentId = $film->id;
         //get actors and store it
         if ($request->actors) {
-            $Af = new ActorsFilms;
+
             foreach ($request->actors as $actor) {
+                $Af = new ActorsFilms;
                 $Af->film_id =$currentId;
                 $Af->actor_id =$actor;
                 $Af->admin_id =Auth::user()->id;
@@ -68,6 +69,8 @@ class FilmsController extends Controller
         if ($request->file('images')) {
 
             foreach ($request->file('images') as $image) {
+                $fm = new FilmsMedia;
+
                 $input['imageName'] = helper::storeImage($image, '/films_thumbnail', '/films_uploads');
                 $fm->admin_id =Auth::user()->id;
                 $fm->film_id = $currentId;
@@ -75,6 +78,7 @@ class FilmsController extends Controller
                 $fm->save();
             }
         } else {
+            $fm = new FilmsMedia;
             $input['imageName'] = '1.png';
             $fm->admin_id =Auth::user()->id;
             $fm->film_id = $currentId;
@@ -86,6 +90,7 @@ class FilmsController extends Controller
         //get trailers and store it
         if ($request->file('trailers')) {
             foreach ($request->file('trailers') as $trialer) {
+                $fm = new FilmsMedia;
                 $input['trialName'] = helper::storeTrailers($trialer, '/films_trials');
                 $fm->admin_id =Auth::user()->id;
                 $fm->film_id = $currentId;

@@ -2,12 +2,14 @@
 @section('content')
 
     <div class="container" style="width: 50%; margin-left: 200px; margin-top: 50px;">
-        @foreach ($lists as $list)
-            <div class="col">
-                <a href="{{route('showFilm', $list->id)}}"> {{$list->List->film_id}} </a>
+        @if($list)
+            @foreach($list as $li)
+                <div class="col-lg-4"> {{$li}}</div>
+                <div class="col-lg-4"> <a href="#">delete</a>   </div>
 
-            </div>
-            <hr>
-        @endforeach
+                <hr>
+                @endforeach
+
+            @endif
     </div>
     @endsection

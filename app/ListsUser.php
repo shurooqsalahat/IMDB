@@ -10,5 +10,10 @@ class ListsUser extends Model
 
     use SoftDeletes;
     protected $dates = ['deleted_at'];
-    //
+
+
+    public function Films()
+    {
+        return $this->hasMany('App\Films','id');
+    }
 }

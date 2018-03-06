@@ -17,7 +17,7 @@
             <ul class="nav navbar-nav">
 
                 <li><a href="{{route('allFilms')}}">Films</a></li>
-                <li><a href="{{route('user.index')}}">watch list</a></li>
+                <li><a href="{{route('showList',Auth::user()->id)}}">watch list</a></li>
             </ul>
             </li>
             </ul>

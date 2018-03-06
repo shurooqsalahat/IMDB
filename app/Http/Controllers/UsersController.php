@@ -1,22 +1,23 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Films;
+use App\Actors;
 use App\ListsUser;
+use App\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
     /*Add film to user list
-     *
+     * args : film id
      * */
     public function addToList($id)
     {
 
         $film = Films::find($id);
-       // $listfilm = ListsUser::find
+        // $listfilm = ListsUser::find
         if ($film) {
             $list = new ListsUser;
             $list->user_id = Auth::user()->id;
@@ -30,20 +31,37 @@ class UsersController extends Controller
         }
     }
 
+    /*show film deatials
+     * args : film id
+     * */
     public function showFilm($id)
     {
         if ($film = Films::find($id)) {
+            $af = Films::find($id);//actors for this film
+            $imageArray = array();
+            $videoArray = array();
+            $actorsArray = array();
+            foreach ($af->Actors as $a) {
+                array_push($actorsArray, $a->name);
+            }
+            foreach ($af->Media as $b) {
+                $ext = pathinfo($b->path, PATHINFO_EXTENSION);
+                if ($ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'gif') {
+                    array_push($imageArray, $b->path);
+                } else {
+                    array_push($videoArray, $b->path);
+                }
 
-            return view('user/film_details', compact('film'));
-        } else {
-            $films = Films::all();
-
-            return view('user/all_films', compact('films'));
+            }
+            $allActors = Actors::all();
+            return view('user/film_details', compact('film', 'imageArray', 'allActors', 'actorsArray', 'videoArray'));
         }
     }
 
 
-
+    /*get all films
+    *
+    * */
     public function getFilms()
     {
         $imageArray = array();
@@ -61,83 +79,21 @@ class UsersController extends Controller
 
         return view('user/all_films', compact('films', 'imageArray'));
     }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-
-    public function index()
+      /*show user lists
+       * args : user id
+       * */
+    public function showlist($user_id)
     {
-        $lists = ListsUser::all();
-        return view('user/list',compact('lists'));
+        $user = Users::find($user_id);
+        $list = array();
+        $idArray=array();
+        foreach ($user->Lists as $b) {
+            $film = Films::find($b->film_id);
+            array_push($idArray,$b->film_id);
+            array_push($list, $film->name);
+        }
+        return view('user/list', compact('list'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

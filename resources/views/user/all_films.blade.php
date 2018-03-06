@@ -19,6 +19,4 @@
             <hr>
         @endforeach
     </div>
-
-
     @endsection

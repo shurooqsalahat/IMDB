@@ -16,5 +16,5 @@ class ActorsFilms extends Model
 
 
 
-    
+
 }
