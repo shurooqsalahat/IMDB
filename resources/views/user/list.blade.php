@@ -5,7 +5,7 @@
         @foreach ($lists as $list)
             <div class="col">
                 <a href="{{route('showFilm', $list->id)}}"> {{$list->List->film_id}} </a>
-            
+
             </div>
             <hr>
         @endforeach

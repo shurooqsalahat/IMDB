@@ -57,7 +57,10 @@ class FilmsController extends Controller
         if ($request->actors) {
             $Af = new ActorsFilms;
             foreach ($request->actors as $actor) {
-                $Af->store(Auth::user()->id, $currentId, $actor);
+                $Af->film_id =$currentId;
+                $Af->actor_id =$actor;
+                $Af->admin_id =Auth::user()->id;
+                $Af->save();
             }
         }
         //get image and store it
@@ -66,11 +69,17 @@ class FilmsController extends Controller
 
             foreach ($request->file('images') as $image) {
                 $input['imageName'] = helper::storeImage($image, '/films_thumbnail', '/films_uploads');
-                $fm->store(Auth::user()->id, $currentId, $input['imageName']);
+                $fm->admin_id =Auth::user()->id;
+                $fm->film_id = $currentId;
+                $fm->path = $input['imageName'];
+                $fm->save();
             }
         } else {
             $input['imageName'] = '1.png';
-            $fm->store(Auth::user()->id, $currentId, $input['imageName']);
+            $fm->admin_id =Auth::user()->id;
+            $fm->film_id = $currentId;
+            $fm->path = $input['imageName'];
+            $fm->save();
         }
 
 
@@ -78,13 +87,20 @@ class FilmsController extends Controller
         if ($request->file('trailers')) {
             foreach ($request->file('trailers') as $trialer) {
                 $input['trialName'] = helper::storeTrailers($trialer, '/films_trials');
-                $fm->store(Auth::user()->id, $currentId, $input['trialName']);
+                $fm->admin_id =Auth::user()->id;
+                $fm->film_id = $currentId;
+                $fm->path =$input['trialName'];
+                $fm->save();
+
             }
 
         } else {
             //default image
             $input['trialName'] = '11.png';
-            $fm->store(Auth::user()->id, $currentId, $input['trialName']);
+            $fm->admin_id =Auth::user()->id;
+            $fm->film_id = $currentId;
+            $fm->path =$input['trialName'];
+            $fm->save();
         }
 
 
