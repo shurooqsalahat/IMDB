@@ -4,8 +4,7 @@
     <div class="container" style="width: 50%; margin-left: 200px; margin-top: 50px;">
         @if($list)
             @foreach($list as $li)
-                <div class="col-lg-4"> {{$li}}</div>
-                <div class="col-lg-4"> <a href="{{route('deleteList')}}">delete</a>   </div>
+                <div class="col"> {{$li}} <a class="btn" style="margin-left: 400px;"> delete</a></div>
                 <hr>
                 @endforeach
 

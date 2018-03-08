@@ -18,11 +18,16 @@ class Films extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
-    public function Actors()
+    public function actors()
     {
-        return $this->belongsToMany('App\Actors','actors_films','film_id','actor_id');
+        return $this->belongsToMany('App\Actors','actors_films','film_id','actor_id')->withPivot('admin_id')
+            ->withTimestamps();
     }
-    public function Media()
+    public function lists()
+    {
+        return $this->belongsToMany('App\Users','lists_users','film_id','user_id')->withTimestamps();
+    }
+    public function media()
     {
         return $this->hasMany('App\FilmsMedia','film_id');
     }

@@ -11,9 +11,10 @@ class Actors extends Model
     protected $fillable = [
         'admin_id', 'name', 'information','image_path',
     ];
-    public function Films()
+    public function films()
     {
-        return $this->belongsToMany('App\Films');
+        return $this->belongsToMany('App\Films','actors_films','film_id','actor_id')->withPivot('admin_id')
+            ->withTimestamps();
     }
 
     protected $dates = ['deleted_at'];

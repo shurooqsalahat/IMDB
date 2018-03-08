@@ -19,7 +19,7 @@ class ActorsController extends Controller
     public function index()
     {
         $actors = Actors::all();
-        return view('actor/actors', compact('actors'));
+        return view('actor/index', compact('actors'));
     }
 
     /**
@@ -29,8 +29,8 @@ class ActorsController extends Controller
      */
     public function create()
     {
-        $actor = new actors;
-        return view('actor/add_actors', compact('actor'));
+        $actor = new Actors;
+        return view('actor/create', compact('actor'));
     }
 
     /**
@@ -47,7 +47,7 @@ class ActorsController extends Controller
             $image = $request->file('image');
             $actor->image_path= helper::storeImage($image,'/uploads','/thumbnail');
         } else {
-            $actor->image_path = '1.png';
+            $actor->image_path = 'default.png';
         }
 
 
@@ -69,7 +69,7 @@ class ActorsController extends Controller
     public function edit($id)
     {
         if ($actor = Actors::find($id)) {
-            return view('actor/edit_actors', compact('actor'));
+            return view('actor/edit', compact('actor'));
         } else {
             return redirect(route('actors.index'))->with('errorMsg', 'This ID is not exist please try again');
         }

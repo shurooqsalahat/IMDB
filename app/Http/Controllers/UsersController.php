@@ -16,13 +16,9 @@ class UsersController extends Controller
      * */
     public function addToList($id)
     {
-
         $film = Films::find($id);
         if ($film) {
-            $list = new ListsUser;
-            $list->user_id = Auth::user()->id;
-            $list->film_id = $id;
-            $list->save();
+            $film->lists()->attach( Auth::user()->id);
             $films = Films::all();
             return redirect(route('allFilms'))->with('successMsg', 'films Successfully Added To Your list');
         } else {
@@ -66,26 +62,14 @@ class UsersController extends Controller
     {
         $imageArray = array();
         $films = Films::all();
-        foreach ($films as $f) {
-            foreach ($f->Media as $fm) {
-                $ext = pathinfo($fm->path, PATHINFO_EXTENSION);
-                if ($ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'gif') {
-                    array_push($imageArray, $fm->path);
-                }
-
-            }
-
-        }
-
-        return view('user/all_films', compact('films', 'imageArray'));
+       return view('user/all_films', compact('films'));
     }
 
     /*show user lists
      * args : user id
      * */
     public function showlist($user_id)
-    {
-        $user = Users::find($user_id);
+    {   $user = Users::find($user_id);
         $list = array();
         $idArray = array();
         foreach ($user->Lists as $b) {
@@ -93,7 +77,7 @@ class UsersController extends Controller
             array_push($idArray, $b->film_id);
             array_push($list, $film->name);
         }
-        return view('user/list', compact('list'));
+        return view('user/list', compact('list','idArray'));
     }
     /*
      * show film trailer

@@ -32,7 +32,7 @@ class Users extends Authenticatable
          return false;
      }
 
-    public function Lists()
+    public function lists()
     {
         return $this->hasMany('App\ListsUser','user_id');
     }

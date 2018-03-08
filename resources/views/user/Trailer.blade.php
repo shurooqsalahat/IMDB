@@ -4,8 +4,8 @@
     @if(!empty($videoArray))
         @foreach($videoArray as $video)
 
-            <div class="center">
-            <video width="1000" height="400" controls>
+            <div class="col">
+            <video width="1000" height="500" controls>
                 <source src="{{asset('films_trials').'//'.$video}}" type="video/mp4">
             </video>
         @endforeach

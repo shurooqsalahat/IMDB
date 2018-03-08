@@ -5,10 +5,10 @@ namespace App;
  * This model for all user define functions that we used in this project
  *
  * */
-use Illuminate\Database\Eloquent\Model;
+
 use Image;
 
-class helper extends Model
+class helper
 {
     /* To resize image and store it , return image name after operations.
      * args : image->input image file
