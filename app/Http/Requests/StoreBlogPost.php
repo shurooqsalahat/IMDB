@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Films;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
-
+use App\Providers\AppServiceProvider;
 class StoreBlogPost extends FormRequest
 {
     /**
@@ -14,10 +15,12 @@ class StoreBlogPost extends FormRequest
      */
     public function authorize()
     {
-        if (Auth::user()->id) {
-            return true;
-        }
+        return true;
+
+
+
     }
+
 
     /**
      * Get the validation rules that apply to the request.

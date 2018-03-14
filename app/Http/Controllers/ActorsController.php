@@ -29,8 +29,13 @@ class ActorsController extends Controller
      */
     public function create()
     {
-        $actor = new Actors;
-        return view('actor/create', compact('actor'));
+        if(Auth::check() && $this->authorize('create',Actors::class) ) {
+            $actor = new Actors;
+            return view('actor/create', compact('actor'));
+        }
+        else{
+            redirect(route('out'));
+        }
     }
 
     /**
@@ -68,10 +73,15 @@ class ActorsController extends Controller
      */
     public function edit($id)
     {
-        if ($actor = Actors::find($id)) {
-            return view('actor/edit', compact('actor'));
-        } else {
-            return redirect(route('actors.index'))->with('errorMsg', 'This ID is not exist please try again');
+        if(Auth::check() && $this->authorize('update',Actors::find($id)) ) {
+            if ($actor = Actors::find($id)) {
+                return view('actor/edit', compact('actor'));
+            } else {
+                return redirect(route('actors.index'))->with('errorMsg', 'This ID is not exist please try again');
+            }
+        }
+        else{
+            return redirect(route('out'));
         }
     }
 
@@ -105,10 +115,15 @@ class ActorsController extends Controller
      */
     public function destroy($id)
     {
-        if (Actors::find($id)->delete()) {
-            return redirect(route('actors.index'))->with('successMsg', 'Student Successfully Delete');
-        } else {
-            return redirect(route('actors.index'))->with('errorMsg', 'Something Error please try again');
+        if (Auth::check() && $this->authorize('delete', Actors::find($id))) {
+            if (Actors::find($id)->delete()) {
+                return redirect(route('actors.index'))->with('successMsg', 'Student Successfully Delete');
+            } else {
+                return redirect(route('actors.index'))->with('errorMsg', 'Something Error please try again');
+            }
+        }
+        else{
+            return redirect(route('out'));
         }
     }
 }

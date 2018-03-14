@@ -2,6 +2,12 @@
 
 namespace App\Providers;
 
+use App\Actors;
+use App\Films;
+use App\Policies\UsersPolicy;
+use App\Policies\FilmPolicy;
+use App\Policies\ActorPolicy;
+use App\Users;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -14,6 +20,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Model' => 'App\Policies\ModelPolicy',
+          Actors::class => ActorPolicy::class,
+          Films::class => FilmPolicy::class,
+          Users::class => UsersPolicy::class,
     ];
 
     /**

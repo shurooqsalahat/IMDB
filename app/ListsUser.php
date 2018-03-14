@@ -14,6 +14,6 @@ class ListsUser extends Model
 
     public function Films()
     {
-        return $this->hasMany('App\Films','id');
+        return $this->hasMany(\App\Films::class,'id');
     }
 }

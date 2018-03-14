@@ -13,7 +13,7 @@ class Actors extends Model
     ];
     public function films()
     {
-        return $this->belongsToMany('App\Films','actors_films','film_id','actor_id')->withPivot('admin_id')
+        return $this->belongsToMany(\App\Films::class,'actors_films','film_id','actor_id')->withPivot('admin_id')
             ->withTimestamps();
     }
 

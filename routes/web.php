@@ -18,6 +18,9 @@ Route::get('admin', function () {
 Route::get('user', function () {
     return view('user/user_home');
 });
+Route::get('/', function () {
+    return view('auth/login');
+});
 Auth::routes();
 Route::get('logout' , 'Auth\LoginController@logout')->name('out');
 Route::get('allFilms','UsersController@getFilms')->name('allFilms');

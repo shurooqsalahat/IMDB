@@ -16,41 +16,50 @@ class UsersController extends Controller
      * */
     public function addToList($id)
     {
-        $film = Films::find($id);
-        if ($film) {
-            $film->lists()->attach( Auth::user()->id);
-            $films = Films::all();
-            return redirect(route('allFilms'))->with('successMsg', 'films Successfully Added To Your list');
+        if (Auth::user() && $this->authorize('addToList', Users::class)) {
+            if ($film = Films::find($id)) {
+                $film->lists()->attach(Auth::user()->id);
+                $films = Films::all();
+                return redirect(route('allFilms'))->with('successMsg', 'films Successfully Added To Your list');
+            } else {
+
+                return redirect(route('allFilms'))->with('errorMsg', 'Something error !');
+            }
         } else {
 
-            return redirect(route('allFilms'))->with('errorMsg', 'Something error !');
+            return redirect(route('out'));
         }
     }
+
 
     /*show film deatials
      * args : film id
      * */
     public function showFilm($id)
     {
-        if ($film = Films::find($id)) {
-            $af = Films::find($id);//actors for this film
-            $imageArray = array();
-            $videoArray = array();
-            $actorsArray = array();
-            foreach ($af->Actors as $a) {
-                array_push($actorsArray, $a->name);
-            }
-            foreach ($af->Media as $b) {
-                $ext = pathinfo($b->path, PATHINFO_EXTENSION);
-                if ($ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'gif') {
-                    array_push($imageArray, $b->path);
-                } else {
-                    array_push($videoArray, $b->path);
+        if (Auth::user()) {
+            if ($film = Films::find($id)) {
+                $af = Films::find($id);//actors for this film
+                $imageArray = array();
+                $videoArray = array();
+                $actorsArray = array();
+                foreach ($af->Actors as $a) {
+                    array_push($actorsArray, $a->name);
                 }
+                foreach ($af->Media as $b) {
+                    $ext = pathinfo($b->path, PATHINFO_EXTENSION);
+                    if ($ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'gif') {
+                        array_push($imageArray, $b->path);
+                    } else {
+                        array_push($videoArray, $b->path);
+                    }
 
+                }
+                $allActors = Actors::all();
+                return view('user/film_details', compact('film', 'imageArray', 'allActors', 'actorsArray', 'videoArray'));
             }
-            $allActors = Actors::all();
-            return view('user/film_details', compact('film', 'imageArray', 'allActors', 'actorsArray', 'videoArray'));
+        } else {
+            return (redirect(route('out')));
         }
     }
 
@@ -58,52 +67,68 @@ class UsersController extends Controller
     /*get all films
     *
     * */
-    public function getFilms()
+    public
+    function getFilms()
     {
-        $imageArray = array();
-        $films = Films::all();
-       return view('user/all_films', compact('films'));
+        if (Auth::user()) {
+            $imageArray = array();
+            $films = Films::all();
+            return view('user/all_films', compact('films'));
+        } else {
+            return redirect(route('out'));
+        }
     }
 
     /*show user lists
      * args : user id
      * */
-    public function showlist($user_id)
-    {   $user = Users::find($user_id);
-        $list = array();
-        $idArray = array();
-        foreach ($user->Lists as $b) {
-            $film = Films::find($b->film_id);
-            array_push($idArray, $b->film_id);
-            array_push($list, $film->name);
+    public
+    function showlist($user_id)
+    {
+        if (Auth::user() && Auth::user()->id == $user_id) {
+
+            $user = Users::find($user_id);
+            $list = array();
+            $idArray = array();
+            foreach ($user->Lists as $b) {
+                $film = Films::find($b->film_id);
+                array_push($idArray, $b->film_id);
+                array_push($list, $film->name);
+            }
+            return view('user/list', compact('list', 'idArray'));
+        } else {
+            return redirect(route('out'));
         }
-        return view('user/list', compact('list','idArray'));
     }
+
+
     /*
      * show film trailer
      * args : film id
      * */
-    public function showTrailer($film_id)
+    public
+    function showTrailer($film_id)
     {
-        $videoArray = array();
-        $film = Films::find($film_id);
-        if ($film) {
-            foreach ($film->Media as $fm) {
-                $ext = pathinfo($fm->path, PATHINFO_EXTENSION);
+        if (Auth::user()) {
+            $videoArray = array();
+            $film = Films::find($film_id);
+            if ($film) {
+                foreach ($film->Media as $fm) {
+                    $ext = pathinfo($fm->path, PATHINFO_EXTENSION);
 
-                if ($ext == 'mp4') {
-                    array_push($videoArray, $fm->path);
+                    if ($ext == 'mp4') {
+                        array_push($videoArray, $fm->path);
+                    }
                 }
+                return view('user/Trailer', compact('videoArray'));
+            } else {
+                return redirect(route('allFilms'))->with('errorMsg', 'Something error !');
+
             }
-            return view('user/Trailer', compact('videoArray'));
-        }
-        else{
-            return redirect(route('allFilms'))->with('errorMsg', 'Something error !');
-
+        } else {
+            return redirect(route('out'));
         }
     }
 
-    public function deleteList($list_id){
 
-    }
 }
