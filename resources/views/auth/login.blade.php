@@ -1,6 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
+    @if (session('successMsg'))
+        <div class=" alert-success" role="alert">
+            <strong>Well done!</strong> {{ session('successMsg') }}
+        </div>
+    @endif
+    @if (session('errorMsg'))
+        <div class=" alert-danger" role="alert">
+            <strong>Error !</strong> {{ session('errorMsg') }}
+        </div>
+    @endif
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">

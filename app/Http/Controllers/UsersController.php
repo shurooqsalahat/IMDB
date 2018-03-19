@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Films;
 use App\Actors;
 use App\ListsUser;
@@ -82,8 +81,7 @@ class UsersController extends Controller
     /*show user lists
      * args : user id
      * */
-    public
-    function showlist($user_id)
+    public function showlist($user_id)
     {
         if (Auth::user() && Auth::user()->id == $user_id) {
 
@@ -129,6 +127,4 @@ class UsersController extends Controller
             return redirect(route('out'));
         }
     }
-
-
 }

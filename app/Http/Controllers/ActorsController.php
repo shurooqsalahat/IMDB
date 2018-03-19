@@ -34,7 +34,7 @@ class ActorsController extends Controller
             return view('actor/create', compact('actor'));
         }
         else{
-            redirect(route('out'));
+            redirect(route('out'))->with('errorMsg', 'Something Error please try again');
         }
     }
 
@@ -54,8 +54,6 @@ class ActorsController extends Controller
         } else {
             $actor->image_path = 'default.png';
         }
-
-
         $actor->admin_id = Auth::user()->id;
         $actor->name = $request->name;
         $actor->information = $request->information;
@@ -73,16 +71,18 @@ class ActorsController extends Controller
      */
     public function edit($id)
     {
-        if(Auth::check() && $this->authorize('update',Actors::find($id)) ) {
+        if (Auth::check() && $this->authorize('update', Actors::find($id))) {
             if ($actor = Actors::find($id)) {
                 return view('actor/edit', compact('actor'));
             } else {
                 return redirect(route('actors.index'))->with('errorMsg', 'This ID is not exist please try again');
             }
         }
+
         else{
-            return redirect(route('out'));
+            return redirect(route('out'))->with('errorMsg', 'Something Error please try again');
         }
+
     }
 
     /**
@@ -104,7 +104,7 @@ class ActorsController extends Controller
         $actor->name = $request->name;
         $actor->information = $request->information;
         $actor->save();
-        return redirect(route('actors.index'))->with('successMsg', 'Student Successfully Update');
+        return redirect(route('actors.index'))->with('successMsg', 'Actors Successfully Update');
     }
 
     /**
@@ -117,13 +117,13 @@ class ActorsController extends Controller
     {
         if (Auth::check() && $this->authorize('delete', Actors::find($id))) {
             if (Actors::find($id)->delete()) {
-                return redirect(route('actors.index'))->with('successMsg', 'Student Successfully Delete');
+                return redirect(route('actors.index'))->with('successMsg', 'Actor Successfully Delete');
             } else {
                 return redirect(route('actors.index'))->with('errorMsg', 'Something Error please try again');
             }
         }
         else{
-            return redirect(route('out'));
+            return redirect(route('out'))->with('errorMsg', 'Something Error please try again');
         }
     }
 }

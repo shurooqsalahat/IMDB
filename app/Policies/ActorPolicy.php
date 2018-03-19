@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Policies;
-
+use Auth;
 use App\Users;
 use App\Actors;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -41,8 +41,10 @@ class ActorPolicy
      * @return mixed
      */
     public function update(Users $user, Actors $actors)
+
     {
-        return ($user->id == $actors->admin_id && $user->is_admin==1);
+
+     return($user->id== $actors->admin_id && $user->is_admin==1);
     }
 
     /**

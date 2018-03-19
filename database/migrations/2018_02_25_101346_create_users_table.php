@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email');
             $table->string('name');
             $table->string('password');
-            $table->boolean('is_admin');
+            $table->boolean('is_admin')->default('1');
             $table->index(['id','name']);
             $table->rememberToken();
             $table->softDeletes();

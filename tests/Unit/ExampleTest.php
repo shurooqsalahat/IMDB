@@ -1,24 +1,26 @@
 <?php
 
 namespace Tests\Unit;
+
 use App\Actors;
 use Tests\TestCase;
+use Auth;
+use App\Users;
+
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 
 
 class ExampleTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
+
+
     public function testBasicTest()
     {
-        $response = $this->get('/admin');
+        $response = $this->get('/');
 
         $response->assertStatus(200);
+
+
     }
-
-
 }
